@@ -30,6 +30,8 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 CHAT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 DEMO_MODE = os.getenv("INTERVIEWER_DEMO_MODE", "true").lower() == "true"
 
+# V1 先用内存保存 session，方便演示 LangGraph + Memory 的主流程。
+# 如果要长期保存面试记录，再把这里换成数据库。
 SESSIONS: dict[str, dict[str, Any]] = {}
 
 app = FastAPI(
@@ -159,6 +161,7 @@ def compact_lines(text: str, limit: int = 8) -> list[str]:
 
 
 def openai_json(system_prompt: str, user_prompt: str, fallback: dict[str, Any]) -> dict[str, Any]:
+    # Demo Mode 下不调 OpenAI，保证面试官没配 API Key 也能打开项目跑一遍。
     if DEMO_MODE or not os.getenv("OPENAI_API_KEY"):
         return fallback
 
@@ -412,6 +415,7 @@ def followup_node(state: InterviewState) -> InterviewState:
 
 
 def build_setup_graph():
+    # 第一条图只负责理解材料和生成问题。
     graph = StateGraph(InterviewState)
     graph.add_node("resume_parser", resume_parser_node)
     graph.add_node("jd_analyzer", jd_analyzer_node)
@@ -424,6 +428,7 @@ def build_setup_graph():
 
 
 def build_answer_graph():
+    # 第二条图负责单轮回答后的评分和追问。
     graph = StateGraph(InterviewState)
     graph.add_node("user_answer", user_answer_node)
     graph.add_node("scoring", scoring_node)
