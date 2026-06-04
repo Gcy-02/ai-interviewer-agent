@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI 面试官 Agent</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">LangGraph · Tool Calling · Memory</p>
+          <h1>AI 面试官 Agent</h1>
+        </div>
+        <a href="/docs" target="_blank" rel="noreferrer">API Docs</a>
+      </header>
+
+      <section class="layout">
+        <aside class="panel setup-panel">
+          <div class="panel-header">
+            <h2>候选人材料</h2>
+            <button id="sample-btn" type="button">使用示例</button>
+          </div>
+
+          <label>
+            简历文本
+            <textarea id="resume-text" rows="8" placeholder="粘贴简历文本，或使用示例材料。"></textarea>
+          </label>
+
+          <label>
+            岗位 JD
+            <textarea id="jd-text" rows="8" placeholder="粘贴岗位描述，或使用示例材料。"></textarea>
+          </label>
+
+          <button id="start-btn" type="button">开始面试</button>
+          <p id="setup-status" class="status">先加载示例，或者粘贴自己的简历和 JD。</p>
+        </aside>
+
+        <section class="panel interview-panel">
+          <div class="panel-header">
+            <h2>面试过程</h2>
+            <span id="session-id">未开始</span>
+          </div>
+
+          <div class="workflow">
+            <span>简历解析</span>
+            <i></i>
+            <span>JD 分析</span>
+            <i></i>
+            <span>问题生成</span>
+            <i></i>
+            <span>评分追问</span>
+          </div>
+
+          <article class="question-box">
+            <p class="label">当前问题</p>
+            <div id="question">点击“开始面试”后，这里会出现第一轮问题。</div>
+          </article>
+
+          <label>
+            候选人回答
+            <textarea id="answer-text" rows="5" placeholder="在这里输入你的回答。"></textarea>
+          </label>
+
+          <div class="actions">
+            <button id="demo-answer-btn" type="button" class="secondary">示例回答</button>
+            <button id="answer-btn" type="button">提交回答</button>
+            <button id="report-btn" type="button" class="secondary">生成复盘</button>
+          </div>
+
+          <section class="result-grid">
+            <article>
+              <p class="label">评分反馈</p>
+              <div id="score-box" class="output">等待回答。</div>
+            </article>
+            <article>
+              <p class="label">Memory</p>
+              <ol id="memory-list" class="memory-list"></ol>
+            </article>
+          </section>
+
+          <article class="report-box">
+            <p class="label">复盘报告</p>
+            <pre id="report-output">完成几轮回答后，可以生成复盘报告。</pre>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
